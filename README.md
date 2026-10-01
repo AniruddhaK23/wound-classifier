@@ -27,6 +27,7 @@ The model was trained in Google Colab; this repository contains the inference an
 ## Repository layout
 
 ```
+streamlit_app.py Streamlit demo — upload or camera, runs the hosted app
 deploy.py        Flask API — loads the model, exposes POST /predict
 website.html     Front end: file upload
 wrbsiteV2.html   Front end: live webcam capture
@@ -46,24 +47,38 @@ python3.12 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Download the trained model from the [Releases](../../releases) page and extract it so the SavedModel sits at `model/` in the project root:
+The trained weights are hosted on the Hugging Face Hub at
+[AniruddhaK23/wound-classifier](https://huggingface.co/AniruddhaK23/wound-classifier).
+Fetch them into the project root:
 
-```
-model/
-├── saved_model.pb
-├── keras_metadata.pb
-└── variables/
+```bash
+hf download AniruddhaK23/wound-classifier --local-dir .
 ```
 
-To load the model from elsewhere, set `WOUND_MODEL_PATH` to its directory.
+This creates `model/` containing the SavedModel. To load it from elsewhere,
+set `WOUND_MODEL_PATH` to that directory. The Streamlit app downloads the
+weights on its own and needs no manual step.
 
 ## Running
+
+### Streamlit app
+
+```bash
+streamlit run streamlit_app.py
+```
+
+Opens a single page with image upload, camera capture, and per-class
+confidence scores. This is also what the hosted demo runs.
+
+### Flask API with the original front ends
 
 ```bash
 python3.12 deploy.py
 ```
 
-The API starts on `http://127.0.0.1:8888`. Open `website.html` in a browser, choose an image, and click **Predict**. For the webcam version, open `wrbsiteV2.html` instead.
+The API starts on `http://127.0.0.1:8888`. Open `website.html` in a browser,
+choose an image, and click **Predict**. For the webcam version, open
+`wrbsiteV2.html` instead.
 
 ## API
 
