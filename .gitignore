@@ -1,0 +1,19 @@
+# Trained model (distributed via GitHub Releases — see README)
+model/
+
+# Dataset (not redistributed — see README for source)
+Train/
+Train.zip
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# macOS
+.DS_Store
+
+# Superseded duplicate of docs/project-report.pdf
+project report.pdf

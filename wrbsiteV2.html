@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wound Image Prediction</title>
+</head>
+<body>
+    <h1>Wound Image Prediction</h1>
+    <video id="video" width="640" height="480" autoplay></video><br>
+    <button id="captureButton">Predict</button>
+
+    <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+    <div id="predictionResult"></div>
+
+    
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('captureButton');
+        const predictButton = document.getElementById('predictButton');
+        let stream;
+
+        // Access the camera
+        async function initCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+            }
+        }
+
+        // Capture image from the camera
+        function captureImage() {
+
+            const context = canvas.getContext('2d');
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    // Convert canvas image to Blob
+    canvas.toBlob((blob) => {
+        // Create FormData object
+        const formData = new FormData();
+        // Append the blob with the key 'image'
+        formData.append('image', blob, 'image.jpg');
+
+        // Send formData to server for prediction
+        fetch('http://127.0.0.1:8888/predict', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+   document.getElementById('predictionResult').innerText = JSON.stringify(data);
+            console.log('Prediction:', data);
+            // Handle prediction response as needed
+        })
+        .catch(error => {
+            console.error('Prediction failed:', error);
+        });
+    }, 'image/jpeg');
+}
+        // Predict image using captured frame
+
+        // Initialize camera when the page loads
+        window.onload = () => {
+            initCamera().catch(console.error);
+        };
+
+        // Add event listener to the capture button
+        captureButton.addEventListener('click', () => {
+            captureImage();
+        });
+
+        // Add event listener to the predict button
+        predictButton.addEventListener('click', () => {
+            predictImage();
+        });
+    </script>
+</body>
+</html>
+
