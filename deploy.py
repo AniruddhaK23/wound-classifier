@@ -29,11 +29,11 @@ def predict():
     image = request.files['image']
 
     # Open the image and resize it to 224x224
-    img = Image.open(image)
-    img = img.resize((224, 224))
+    img = Image.open(image).convert("RGB").resize((224, 224))
 
     # Convert the image to numpy array
-    image_array = np.array(img)
+    # float32 is explicit: TensorFlow 2.21 no longer auto-casts uint8 input.
+    image_array = np.array(img, dtype=np.float32)
 
     # Normalize the image
     #image_array = image_array / 255.0
@@ -41,7 +41,9 @@ def predict():
     #return jsonify({'prediction': "asda"})
 
     # Perform prediction
-    prediction = model(np.expand_dims(image_array, axis=0))['dense_5']
+    # Output taken by position so a retrain that renames the layer still works.
+    outputs = model(np.expand_dims(image_array, axis=0))
+    prediction = list(outputs.values())[0]
 
     # You can post-process the prediction if necessary
     
