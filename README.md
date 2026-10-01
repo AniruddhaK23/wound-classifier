@@ -4,6 +4,11 @@ A deep learning web application that classifies chronic wound images into six cl
 
 Built with a ResNet50 transfer-learning backbone, served through a Flask API with a browser front end.
 
+### ▶ [Try the live demo](https://wound-classifier.streamlit.app)
+
+No install required. The hosted app sleeps after inactivity, so the first load
+may take a minute to wake.
+
 ## Classes
 
 | Label | Wound type |
@@ -68,7 +73,8 @@ streamlit run streamlit_app.py
 ```
 
 Opens a single page with image upload, camera capture, and per-class
-confidence scores. This is also what the hosted demo runs.
+confidence scores. This is what [the hosted demo](https://wound-classifier.streamlit.app)
+runs.
 
 ### Flask API with the original front ends
 
