@@ -2,7 +2,8 @@
 
 A deep learning web application that classifies chronic wound images into six clinical categories. Upload a photo (or use your webcam) and the model returns a predicted wound type with a confidence score.
 
-Built with a ResNet50 transfer-learning backbone, served through a Flask API with a browser front end.
+Built with a ResNet50 transfer-learning backbone, served either through a
+Streamlit app or a Flask API with a browser front end.
 
 ### ▶ [Try the live demo](https://wound-classifier.streamlit.app)
 
